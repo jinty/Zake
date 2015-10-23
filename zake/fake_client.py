@@ -149,7 +149,7 @@ class FakeClient(object):
             raise k_exceptions.SessionExpiredError("Expired")
 
     @property
-    def session_id(self):
+    def _session_id(self):
         return self._partial_client.session_id
 
     @property
@@ -267,7 +267,7 @@ class FakeClient(object):
 
     def restart(self):
         with self._open_close_lock:
-            before = self.session_id
+            before = self._session_id
             self.stop()
             self.start()
             return before

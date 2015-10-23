@@ -129,7 +129,7 @@ class FakeStorage(object):
             return self.get(path)[1]
 
     def purge(self, client):
-        if not client.session_id:
+        if not client._session_id:
             return 0
         with self._client_lock:
             if client in self._clients:
@@ -140,7 +140,7 @@ class FakeStorage(object):
         with self.lock:
             for path, data in six.iteritems(self._paths):
                 if data['ephemeral'] \
-                   and data['ephemeral_owner'] == client.session_id:
+                   and data['ephemeral_owner'] == client._session_id:
                     removals.append(path)
             data_watches = []
             for path in removals:

@@ -293,10 +293,11 @@ class TestClient(test.Test):
             self.assertFalse(txn.committed)
 
     def test_session_id(self):
-        self.assertIsNone(self.client.session_id)
+        self.assertIsNone(self.client._session_id)
         with start_close(self.client) as c:
-            self.assertIsNotNone(c.session_id)
-        self.assertIsNone(self.client.session_id)
+            self.assertIsNotNone(c._session_id)
+            self.assertTrue(isinstance(c._session_id, six.integer_types))
+        self.assertIsNone(self.client._session_id)
 
     def test_client_id(self):
         self.assertIsNone(self.client.client_id)
