@@ -466,7 +466,7 @@ class TestClient(test.Test):
         with start_close(self.client) as c:
             self.assertRaises(k_exceptions.NoNodeError,
                               k_watchers.ChildrenWatch,
-                              self.client, "/b", cb)
+                              c, "/b", cb)
 
     def test_create_sequence(self):
         with start_close(self.client) as c:
