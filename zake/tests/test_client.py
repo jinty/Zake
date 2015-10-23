@@ -298,6 +298,14 @@ class TestClient(test.Test):
             self.assertIsNotNone(c.session_id)
         self.assertIsNone(self.client.session_id)
 
+    def test_client_id(self):
+        self.assertIsNone(self.client.client_id)
+        with start_close(self.client) as c:
+            sess_id, password = c.client_id
+            self.assertTrue(isinstance(sess_id, six.integer_types))
+            self.assertTrue(isinstance(password, six.binary_type))
+        self.assertIsNone(self.client.client_id)
+
     def test_data_watch_not_triggered(self):
         ev = Event()
         updates = []

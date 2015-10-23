@@ -23,6 +23,7 @@ import logging
 import sys
 import time
 import uuid
+import hashlib
 
 import six
 
@@ -150,6 +151,14 @@ class FakeClient(object):
     @property
     def session_id(self):
         return self._partial_client.session_id
+
+    @property
+    def client_id(self):
+        sess_id = self._partial_client.session_id
+        if sess_id is None:
+            return sess_id
+        fake_password = hashlib.md5(str(sess_id).encode('ascii')).digest()
+        return (sess_id, fake_password)
 
     @property
     def timeout_exception(self):
