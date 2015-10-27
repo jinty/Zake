@@ -315,18 +315,13 @@ class FakeClient(object):
         if watch:
             with self._watches_lock:
                 self._child_watchers[path].append(watch)
+        children = []
+        for child_path in six.iterkeys(paths):
+            child_path = clean_path(child_path[len(path):])
+            children.append(child_path)
         if include_data:
-            children_with_data = []
-            for (child_path, data) in six.iteritems(paths):
-                child_path = clean_path(child_path[len(path):])
-                children_with_data.append((child_path, data))
-            return children_with_data
-        else:
-            children = []
-            for child_path in six.iterkeys(paths):
-                child_path = clean_path(child_path[len(path):])
-                children.append(child_path)
-            return children
+            return (children, self.storage.get(path)[1])
+        return children
 
     def get_children_async(self, path, watch=None, include_data=False):
         return utils.dispatch_async(self.handler, self.get_children, path,

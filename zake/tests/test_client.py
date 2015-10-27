@@ -244,6 +244,19 @@ class TestClient(test.Test):
             c.ensure_path("/a/d")
             self.assertEqual(3, len(c.get_children("/a")))
 
+    def test_get_children_with_data(self):
+        with start_close(self.client) as c:
+            c.ensure_path("/a/b")
+            c.ensure_path("/a/c")
+            c.ensure_path("/a/d")
+            children, stat = c.get_children("/a", include_data=True)
+            self.assertEqual({'b', 'c', 'd'}, set(children))
+            self.assertEqual(stat.data_length, 0)
+            c.set('/a', b'bob')
+            children, stat = c.get_children("/a", include_data=True)
+            self.assertEqual({'b', 'c', 'd'}, set(children))
+            self.assertEqual(stat.data_length, 3)
+
     def test_exists(self):
         with start_close(self.client) as c:
             c.ensure_path("/a")
